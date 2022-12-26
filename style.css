@@ -1,0 +1,62 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+header {
+  position: fixed;
+  width: 100%;
+  height: 70px;
+  background-color: #121212;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+h1 {
+  text-align: center;
+  width: fit-content;
+  background-color: #e2b616;
+  padding: 5px;
+  border-radius: 8px;
+  font-size: 2em;
+  font-family: "Kenyan Coffee";
+  margin: 0 20px;
+}
+
+#search {
+  width: 200px;
+  height: 30px;
+  border-radius: 5px;
+  padding-left: 10px;
+}
+
+#numberOfResult {
+  color: white;
+  margin-left: 20px;
+  font-size: 1.2em;
+}
+
+main {
+  padding-top: 80px;
+}
+
+#selector {
+  display: flex;
+}
+
+#SE {
+  margin: 10px;
+  font-size: 1.3em;
+}
+select {
+  margin: 10px;
+  width: 20vw;
+  font-size: 1.2em;
+}
+
+#showEpisodes {
+  /* display: grid;  
+  grid-template-columns: repeat(auto-fill, 300px); */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}

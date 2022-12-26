@@ -6,11 +6,34 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TV Show</title>
-    <style href="style.css"></style>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+    <header>
+        <h1>TV Show</h1>
+        <input type="search" id="search" placeholder="Search">
+        <label id="numberOfResult">__ Results</label>
+    </header>
+    <main>
+        <section id="selector">
+            <div>
+                <label for="season" id="SE">season:</label><br>
+                <select name="season" id="season">
+                    <option selected id="selected">All Seasons</option>
+                </select>
+            </div>
+            <div>
+                <label for="episode" id="SE">episode:</label><br>
+                <select name="episode" id="episode">
+                    <option selected>All Episodes</option>
+                </select>
+            </div>
+        </section>
+        <section id="showEpisodes">
 
+        </section>
+    </main>
     <script src="index.js"></script>
 </body>
 
