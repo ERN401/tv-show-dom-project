@@ -3,7 +3,7 @@ const fetchAPI = async () => {
     const res = await fetch("data.json");
     const data = await res.json();
     main(data);
-    // console.log(data);
+    console.log(data);
   } catch (err) {
     console.log("something went wrong", err);
   }
@@ -14,6 +14,8 @@ function main(data) {
   show(data);
   const seasons = document.querySelector("#season");
   const episodes = document.querySelector("#episode");
+  const inputSearch = document.querySelector("#search");
+  const numberOfResults = document.querySelector("#numberOfResults");
 
   //create options for seasons
   let numberOfSeasons = data[data.length - 1].season;
@@ -54,6 +56,16 @@ function main(data) {
       }
     });
   });
+
+  inputSearch.addEventListener("input", () => {
+    let newData = data.filter(
+      (el) =>
+        el.name.includes(inputSearch.value) ||
+        el.summary.includes(inputSearch.value)
+    );
+    numberOfResults.innerHTML = `${newData.length} results`;
+    show(newData);
+  });
 }
 
 function show(data) {
@@ -65,7 +77,10 @@ function show(data) {
     const img = document.createElement("img");
     const number = document.createElement("p");
     const title = document.createElement("h3");
+    const link = document.createElement("a");
     const summary = document.createElement("p");
+    const rate = document.createElement("span");
+    const runtime = document.createElement("span");
 
     div.style.display = "flex";
     div.style.flexDirection = "column";
@@ -85,13 +100,29 @@ function show(data) {
       minimumIntegerDigits: 2,
     });
     number.innerText = `S${seasonNumber}E${episodeNumber}`;
-    number.style.textAlign = "center";
+    number.style.display = "flex";
+    number.style.justifyContent = "space-between";
+    number.style.padding = "2px";
     number.style.margin = "0";
     number.style.backgroundColor = "#6B7A83";
     number.style.color = "white";
+    rate.innerText = `${episode.rating.average}`;
+    rate.style.backgroundColor = "#e2b616";
+    rate.style.color = "#121212";
+    rate.style.padding = "0px 2px";
+    rate.style.borderRadius = "2px";
+    rate.style.fontWeight = "bold";
+    number.insertAdjacentElement("afterbegin", rate);
+    runtime.innerText = `${episode.runtime}'`;
+    number.append(runtime);
     div.append(number);
 
-    title.innerText = episode.name;
+    link.innerText = episode.name;
+    link.href = episode.url;
+    link.target = "_blank";
+    link.style.textDecoration = "none";
+    link.style.color = "black";
+    title.append(link);
     div.append(title);
 
     summary.innerHTML = episode.summary;
