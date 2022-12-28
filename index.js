@@ -1,71 +1,25 @@
 const fetchAPI = async () => {
   try {
     const res = await fetch("data.json");
+    /*
+     https://api.tvmaze.com/shows/82/episodes
+     freinds: 431
+     dark: 17861
+     the office: 526
+    */
     const data = await res.json();
     main(data);
-    console.log(data);
+    // console.log(data);
   } catch (err) {
-    console.log("something went wrong", err);
+    alert("something went wrong\n" + err);
   }
 };
 fetchAPI();
 
 function main(data) {
   show(data);
-  const seasons = document.querySelector("#season");
-  const episodes = document.querySelector("#episode");
-  const inputSearch = document.querySelector("#search");
-  const numberOfResults = document.querySelector("#numberOfResults");
-
-  //create options for seasons
-  let numberOfSeasons = data[data.length - 1].season;
-  for (let i = 1; i <= numberOfSeasons; i++) {
-    const opt = document.createElement("option");
-    opt.innerText = i;
-    opt.value = i;
-    seasons.appendChild(opt);
-  }
-
-  let season, episode, filteredData;
-  seasons.addEventListener("change", () => {
-    season = seasons.value;
-    if (season === "All Seasons") {
-      episodes.innerHTML = "<option selected>All Episodes</option>";
-      show(data);
-    } else {
-      episode = data.filter((el) => el.season == season).length;
-      episodes.innerHTML = "<option selected>All Episodes</option>";
-      for (let i = 1; i <= episode; i++) {
-        const opt = document.createElement("option");
-        opt.innerText = i;
-        opt.value = i;
-        episodes.append(opt);
-      }
-      filteredData = data.filter((el) => el.season == season);
-      show(filteredData);
-    }
-
-    episodes.addEventListener("change", () => {
-      episode = episodes.value;
-      if (episode === "All Episodes") show(filteredData);
-      else {
-        let singleEpisode = data.filter(
-          (el) => el.season == season && el.number == episode
-        );
-        show(singleEpisode);
-      }
-    });
-  });
-
-  inputSearch.addEventListener("input", () => {
-    let newData = data.filter(
-      (el) =>
-        el.name.includes(inputSearch.value) ||
-        el.summary.includes(inputSearch.value)
-    );
-    numberOfResults.innerHTML = `${newData.length} results`;
-    show(newData);
-  });
+  selectSeasonEpisode(data);
+  search(data);
 }
 
 function show(data) {
@@ -90,8 +44,12 @@ function show(data) {
     div.style.width = "250px";
     div.style.height = "300px";
 
-    img.src = episode.image.medium;
+    img.alt = episode.name;
+    if (episode.image) {
+      img.src = episode.image.medium;
+    }
     div.append(img);
+    // console.log(episode.image === null);
 
     const seasonNumber = Number(episode.season).toLocaleString("en-US", {
       minimumIntegerDigits: 2,
@@ -132,3 +90,77 @@ function show(data) {
     showEpisodes.append(div);
   }
 }
+
+function selectSeasonEpisode(data) {
+  const seasons = document.querySelector("#season");
+  const episodes = document.querySelector("#episode");
+
+  //create options for seasons
+  let numberOfSeasons = data[data.length - 1].season;
+  for (let i = 1; i <= numberOfSeasons; i++) {
+    const opt = document.createElement("option");
+    opt.innerText = i;
+    opt.value = i;
+    seasons.appendChild(opt);
+  }
+
+  let season, episode, filteredData;
+  seasons.addEventListener("change", () => {
+    season = seasons.value;
+    if (season === "All Seasons") {
+      episodes.innerHTML = "<option selected>All Episodes</option>";
+      show(data);
+    } else {
+      episode = data.filter((el) => el.season == season).length;
+      episodes.innerHTML = "<option selected>All Episodes</option>";
+      // creat options for episodes
+      for (let i = 1; i <= episode; i++) {
+        const opt = document.createElement("option");
+        opt.innerText = i;
+        opt.value = i;
+        episodes.append(opt);
+      }
+      filteredData = data.filter((el) => el.season == season);
+      show(filteredData);
+    }
+
+    episodes.addEventListener("change", () => {
+      episode = episodes.value;
+      if (episode === "All Episodes") show(filteredData);
+      else {
+        let singleEpisode = data.filter(
+          (el) => el.season == season && el.number == episode
+        );
+        show(singleEpisode);
+      }
+    });
+  });
+}
+
+function search(data) {
+  const inputSearch = document.querySelector("#search");
+  const numberOfResults = document.querySelector("#numberOfResults");
+
+  inputSearch.addEventListener("input", () => {
+    let newData = data.filter(
+      (el) =>
+        el.name.toLowerCase().includes(inputSearch.value) ||
+        el.summary.toLowerCase().includes(inputSearch.value)
+    );
+
+    if (inputSearch.value === "") numberOfResults.innerHTML = "";
+    else numberOfResults.innerHTML = `${newData.length} results`;
+
+    show(newData);
+  });
+}
+
+// control ↑ button
+const btnTop = document.querySelector("#top");
+window.onscroll = function () {
+  if (document.documentElement.scrollTop > 20) {
+    btnTop.style.display = "block";
+  } else {
+    btnTop.style.display = "none";
+  }
+};

@@ -1,6 +1,8 @@
+html,
 body {
   margin: 0;
   padding: 0;
+  scroll-behavior: smooth;
 }
 header {
   position: fixed;
@@ -54,9 +56,30 @@ select {
 }
 
 #showEpisodes {
-  /* display: grid;  
-  grid-template-columns: repeat(auto-fill, 300px); */
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+}
+
+#top {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+
+  text-decoration: none;
+  padding: 11px 21px;
+  font-size: 2em;
+  font-weight: 100;
+  color: #121212;
+  background: #e2b616;
+  border-radius: 50%;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+    rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
+    rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+  transition: transform 0.2s;
+}
+
+#top:hover {
+  transform: scale(1.2);
 }
