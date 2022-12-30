@@ -45,13 +45,9 @@ main {
   display: flex;
 }
 
-#SE {
-  margin: 10px;
-  font-size: 1.3em;
-}
 select {
   margin: 10px;
-  width: 25vw;
+  width: 40vw;
   font-size: 1.2em;
 }
 

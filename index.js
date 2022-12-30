@@ -1,7 +1,7 @@
 const fetchAPI = async () => {
   try {
-    // const res = await fetch("data.json");
-    const res = await fetch("https://api.tvmaze.com/shows/82/episodes");
+    const res = await fetch("data.json");
+    // const res = await fetch("https://api.tvmaze.com/shows/82/episodes");
     /*     
      freinds: 431
      dark: 17861
@@ -18,7 +18,7 @@ fetchAPI();
 
 function main(data) {
   show(data);
-  selectSeasonEpisode(data);
+  selectEpisode(data);
   search(data);
 }
 
@@ -120,60 +120,40 @@ function PtagToString(p) {
   return p;
 }
 
-function selectSeasonEpisode(data) {
-  const seasons = document.querySelector("#season");
-  const episodesSelect = document.querySelector("#episode");
+function selectEpisode(data) {
+  const epidoses = document.querySelector("#episodes");
 
-  //create options for seasons
-  let numberOfSeasons = data[data.length - 1].season;
-  for (let i = 1; i <= numberOfSeasons; i++) {
+  // create option for episode
+  for (let episode of data) {
     const opt = document.createElement("option");
-    opt.innerText = i;
-    opt.value = i;
-    seasons.appendChild(opt);
+    const episodeNumber = Number(episode.number).toLocaleString("en-US", {
+      minimumIntegerDigits: 2,
+    });
+    const seasonNumber = Number(episode.season).toLocaleString("en-US", {
+      minimumIntegerDigits: 2,
+    });
+    opt.innerText = `S${seasonNumber}E${episodeNumber} - ${episode.name}`;
+    opt.value = episode.name;
+    epidoses.append(opt);
   }
 
-  let season, episode, episodes, filteredData;
-  seasons.addEventListener("change", () => {
-    season = seasons.value;
-    if (season === "All Seasons") {
-      episodesSelect.innerHTML = "<option selected>All Episodes</option>";
-      show(data);
-    } else {
-      episodes = data.filter((el) => el.season == season);
-      episodesSelect.innerHTML = "<option selected>All Episodes</option>";
-      // creat options for episodes
-      for (let episode of episodes) {
-        const opt = document.createElement("option");
-        const episodeNumber = Number(episode.number).toLocaleString("en-US", {
-          minimumIntegerDigits: 2,
-        });
-        opt.innerText = `${episodeNumber} - ${episode.name}`;
-        opt.value = episode.name;
-        episodesSelect.append(opt);
-      }
-      filteredData = data.filter((el) => el.season == season);
-      show(filteredData);
+  episodes.addEventListener("change", () => {
+    episode = episodes.value;
+    if (episode === "All Episodes") show(data);
+    else {
+      let singleEpisode = data.filter((el) => el.name == episode);
+      show(singleEpisode);
     }
-
-    episodesSelect.addEventListener("change", () => {
-      episode = episodesSelect.value;
-      if (episode === "All Episodes") show(filteredData);
-      else {
-        let singleEpisode = data.filter(
-          (el) => el.season == season && el.name == episode
-        );
-        show(singleEpisode);
-      }
-    });
   });
 }
 
 function search(data) {
   const inputSearch = document.querySelector("#search");
   const numberOfResults = document.querySelector("#numberOfResults");
+  const epidoses = document.querySelector("#episodes");
 
   inputSearch.addEventListener("input", () => {
+    epidoses.selectedIndex = 0; // when search sth, episode select would be reset
     let newData = data.filter(
       (el) =>
         el.name.toLowerCase().includes(inputSearch.value) ||
