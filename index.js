@@ -1,7 +1,7 @@
 const fetchAPI = async () => {
   try {
     const res = await fetch("data.json");
-    // const res = await fetch("https://api.tvmaze.com/shows/82/episodes");
+    // const res = await fetch("https://api.tvmaze.com/shows/17861/episodes");
     /*     
      freinds: 431
      dark: 17861
@@ -122,6 +122,7 @@ function PtagToString(p) {
 
 function selectEpisode(data) {
   const epidoses = document.querySelector("#episodes");
+  let previousSeason = 1;
 
   // create option for episode
   for (let episode of data) {
@@ -132,6 +133,16 @@ function selectEpisode(data) {
     const seasonNumber = Number(episode.season).toLocaleString("en-US", {
       minimumIntegerDigits: 2,
     });
+    // add separator between seasons
+    if (previousSeason != episode.season) {
+      const dashOption = document.createElement("option");
+      dashOption.innerText =
+        "-----------------------------------------------------";
+      dashOption.value = "";
+      dashOption.disabled = true;
+      epidoses.append(dashOption);
+    }
+    previousSeason = episode.season;
     opt.innerText = `S${seasonNumber}E${episodeNumber} - ${episode.name}`;
     opt.value = episode.name;
     epidoses.append(opt);
