@@ -1,15 +1,13 @@
 const fetchAPI = async () => {
   try {
-    const res = await fetch("data.json");
-    // const res = await fetch("https://api.tvmaze.com/shows/17861/episodes");
+    const res = await fetch("https://api.tvmaze.com/shows/17861/episodes");
     /*     
-     freinds: 431
+     friends: 431
      dark: 17861
      the office: 526
     */
     const data = await res.json();
     main(data);
-    // console.log(data);
   } catch (err) {
     alert("something went wrong\n" + err);
   }
